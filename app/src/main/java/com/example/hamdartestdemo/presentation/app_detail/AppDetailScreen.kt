@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -73,7 +74,6 @@ fun AppDetailScreen(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data(Constants.ICON_URL.plus(app.iconUrl))
                             .crossfade(true)
-                            .error(android.R.drawable.stat_notify_error)
                             .build(),
                         onSuccess = { isImageLoading = false },
                         contentDescription = null,

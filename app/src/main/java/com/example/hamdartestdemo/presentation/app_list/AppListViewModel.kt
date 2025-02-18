@@ -23,11 +23,21 @@ class AppListViewModel @Inject constructor(
         getApps()
     }
 
-    private fun getApps() {
+    fun getApps() {
         getAppsUseCase().onEach { result ->
             when (result) {
                 is Resource.Success -> {
-                    _state.value = AppListState(apps = result.data ?: emptyList())
+                    if (result.data != null) {
+                        if (result.data.first.isEmpty()) {
+                            _state.value = AppListState(noData = true)
+                        } else {
+                            _state.value =
+                                AppListState(
+                                    apps = result.data.first,
+                                    dataSource = result.data.second
+                                )
+                        }
+                    }
                 }
 
                 is Resource.Error -> {

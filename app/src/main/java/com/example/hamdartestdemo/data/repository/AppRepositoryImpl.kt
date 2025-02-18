@@ -3,6 +3,7 @@ package com.example.hamdartestdemo.data.repository
 import com.example.hamdartestdemo.data.local.AppLocalDataSource
 import com.example.hamdartestdemo.data.remote.AppApi
 import com.example.hamdartestdemo.data.remote.dto.AppDto
+import com.example.hamdartestdemo.domain.model.DataSource
 import com.example.hamdartestdemo.domain.repository.AppRepository
 import com.google.gson.reflect.TypeToken
 import retrofit2.HttpException
@@ -16,22 +17,22 @@ class AppRepositoryImpl @Inject constructor(
     private val fileName = "app_cache.json"
     private val cacheValidity = 60 * 1000L
 
-    override suspend fun getApps(): List<AppDto> {
+    override suspend fun getApps(): Pair<List<AppDto>, DataSource> {
         // Check if cached data is available and still valid
         if (appLocalDataSource.isCacheValid(fileName, cacheValidity)) {
-            getCachedData()
-        }
+            return Pair(getCachedData(), DataSource.LOCAL_STORAGE)
+        } else {
+            // Fetch fresh data from network and update cache
+            try {
+                val appList = api.getApps()
+                appLocalDataSource.saveDataToFile(fileName, appList)
 
-        // Fetch fresh data from network and update cache
-        try {
-            val appList = api.getApps()
-            appLocalDataSource.saveDataToFile(fileName, appList)
-
-            return appList
-        } catch(e: HttpException) {
-            return getCachedData()
-        } catch(e: IOException) {
-            return getCachedData()
+                return Pair(appList, DataSource.NETWORK)
+            } catch(e: HttpException) {
+                return Pair(getCachedData(), DataSource.LOCAL_STORAGE)
+            } catch(e: IOException) {
+                return Pair(getCachedData(), DataSource.LOCAL_STORAGE)
+            }
         }
     }
 

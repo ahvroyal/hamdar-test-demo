@@ -1,0 +1,6 @@
+<network-security-config>
+    <!-- Allow HTTP for MinIO (if not using HTTPS) -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">https://play.min.io</domain>
+    </domain-config>
+</network-security-config>

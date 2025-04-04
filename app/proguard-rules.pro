@@ -19,3 +19,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+#-dontwarn com.fasterxml.**
+#-keep class com.ctc.wstx.** { *; }
+#-dontwarn com.ctc.wstx.**

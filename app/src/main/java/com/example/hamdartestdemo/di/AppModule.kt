@@ -3,6 +3,7 @@ package com.example.hamdartestdemo.di
 import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.example.hamdartestdemo.common.Constants
+import com.example.hamdartestdemo.common.MinioHelper
 import com.example.hamdartestdemo.data.local.AppLocalDataSource
 import com.example.hamdartestdemo.data.remote.AppApi
 import com.example.hamdartestdemo.data.repository.AppRepositoryImpl
@@ -12,6 +13,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import io.minio.MinioClient
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -55,6 +57,30 @@ object AppModule {
         appLocalDataSource: AppLocalDataSource
     ): AppRepository {
         return AppRepositoryImpl(api, appLocalDataSource)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMinioClient(): MinioClient {
+        return MinioClient.builder()
+            .endpoint("https://play.min.io")
+            .credentials(
+                "Q3AM3UQ867SPQQA43P2F",
+                "zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG"
+            )
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideMinioHelper(
+        @ApplicationContext context: Context,
+        minioClient: MinioClient
+    ): MinioHelper {
+        return MinioHelper(
+            context,
+            minioClient
+        )
     }
 
 }

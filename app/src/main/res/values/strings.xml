@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">HamdarTestDemo</string>
+    <string name="empty_bucket">ℹ️ App data not backed up.</string>
+    <string name="backed_up">ℹ️ App data is backed up successfully. all files available in the bucket are listed above.</string>
+    <string name="not_backed_up">ℹ️ App data not backed up. other files available in the bucket are listed above.</string>
 </resources>
